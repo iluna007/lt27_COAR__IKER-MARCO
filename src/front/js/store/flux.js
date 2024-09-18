@@ -31,10 +31,10 @@ const getState = ({ getStore, getActions, setStore }) => {
       currentBuyerId: null,
       currentBuyerAddress: '',
       auth: false,
-      authToken:"valor inicial",
-      orders:[],
-      authToken2:"valor inicial",
-      products:[],
+      authToken: "valor inicial",
+      orders: [],
+      authToken2: "valor inicial",
+      products: [],
       currentCraftman: null,
       currentCraftmanAddress: null,
 
@@ -51,47 +51,47 @@ const getState = ({ getStore, getActions, setStore }) => {
         const actions = getActions()
 
         fetch(process.env.BACKEND_URL + "/api/orders/update/" + orderId, {
-          method:"PUT",
-          headers:{
+          method: "PUT",
+          headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({status: newStatus})
+          body: JSON.stringify({ status: newStatus })
         })
 
-        .then(resp => resp.json())
-        .then(updateOrder => {
-          if(updateOrder.order){
-            const updateOrders = store.orders.map(order => {
-              if(order.id === orderId){
-                return{...order, status:updateOrder.order.status, updated_at: updateOrder.updated_at}
-              }
-              return order;
+          .then(resp => resp.json())
+          .then(updateOrder => {
+            if (updateOrder.order) {
+              const updateOrders = store.orders.map(order => {
+                if (order.id === orderId) {
+                  return { ...order, status: updateOrder.order.status, updated_at: updateOrder.updated_at }
+                }
+                return order;
+              })
+              setStore({ orders: updateOrders })
+            } else {
+              console.error("Error updating order", updateOrder.msg)
+            }
           })
-          setStore({orders: updateOrders})
-        } else {
-          console.error("Error updating order", updateOrder.msg)
-        }
-        })
       },
       incrementQuantity: (itemId) => {
         const store = getStore();
         const updatedCart = store.cart.map(item => {
-            if (item.id === itemId) {
-                return { ...item, quantity: item.quantity + 1 };
-            }
-            return item;
-          });
-          setStore({ cart: updatedCart });
+          if (item.id === itemId) {
+            return { ...item, quantity: item.quantity + 1 };
+          }
+          return item;
+        });
+        setStore({ cart: updatedCart });
       },
       decrementQuantity: (itemId) => {
         const store = getStore();
         const updatedCart = store.cart.map(item => {
-            if (item.id === itemId && item.quantity > 1) {
-                return { ...item, quantity: item.quantity - 1 };
-            }
-            return item;
-          });
-          setStore({ cart: updatedCart });
+          if (item.id === itemId && item.quantity > 1) {
+            return { ...item, quantity: item.quantity - 1 };
+          }
+          return item;
+        });
+        setStore({ cart: updatedCart });
       },
       getCraftmanProducts: async () => {
         const store = getStore();
@@ -844,7 +844,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             return response.json();
           })
           .then((data) => {
-            console.log("Segundo .then ",data);
+            console.log("Segundo .then ", data);
             actions.saveAuthToken2(data.access_token);
             setStore({ currentCraftman: data.craftman_id })
             setStore({ currentCraftmanAddress: data.address })
@@ -889,7 +889,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
         fetch(process.env.BACKEND_URL + "/api/login_b", requestOptions)
           .then((response) => {
-            console.log("aqui que hay", response);
+            console.log("algo anda mal", response);
             if (response.status == 200) {
               return response.json();
             }
